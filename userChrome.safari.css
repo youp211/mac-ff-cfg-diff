@@ -83,6 +83,43 @@
     box-shadow: none !important;
   }
 
+  /* --- Tabs like favorites ------------------------------------------------------
+     Each tab is as wide as its icon and title instead of an equal share of the
+     strip, with no separator lines between tabs. The close and mute buttons
+     take no room until the tab is hovered, then slide open.
+     To go back to equal-width tabs, set userChrome.safari.classic_tabs to true
+     in about:config. */
+  @media not -moz-pref("userChrome.safari.classic_tabs") {
+    :root:root:root {
+      --tab-padding-inline: 4px !important;
+    }
+    #tabbrowser-tabs[orient="horizontal"] .tabbrowser-tab[fadein]:not([pinned]) {
+      flex: 0 100 auto !important;
+      min-width: 36px !important;
+    }
+    #tabbrowser-tabs#tabbrowser-tabs .tab-stack::before,
+    #tabbrowser-tabs#tabbrowser-tabs .tab-stack::after,
+    #tabbrowser-tabs#tabbrowser-tabs #tabs-newtab-button::before {
+      display: none !important;
+    }
+    #TabsToolbar #tabbrowser-tabs .tabbrowser-tab:not([pinned]) .tab-content > :is(.tab-close-button, .tab-audio-button, .tab-note-icon) {
+      visibility: visible !important;
+      overflow: clip !important;
+      max-width: 24px !important;
+    }
+    #TabsToolbar #tabbrowser-tabs .tabbrowser-tab:not([pinned], :hover) .tab-content > :is(.tab-close-button, .tab-audio-button, .tab-note-icon) {
+      max-width: 0 !important;
+      padding-inline: 0 !important;
+      margin-inline: 0 !important;
+      opacity: 0 !important;
+    }
+    @media (prefers-reduced-motion: no-preference) {
+      #TabsToolbar #tabbrowser-tabs .tabbrowser-tab:not([pinned]) .tab-content > :is(.tab-close-button, .tab-audio-button, .tab-note-icon) {
+        transition: max-width 0.15s ease-out, padding 0.15s ease-out, margin 0.15s ease-out, opacity 0.15s ease-out !important;
+      }
+    }
+  }
+
   /* --- Tabs only appear when there is more than one --------------------------
      With a single tab (and no pinned tabs or tab groups) the tab is hidden,
      the toolbar takes the full width and the address bar is centred. The

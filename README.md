@@ -18,10 +18,14 @@ Restart Firefox.
 - tabs + toolbar on one row
 - window buttons, toolbar buttons, address bar, tabs all on one line
 - tab strip hidden with a single tab
-- small tabs, active tab in the accent colour
+- tabs sized like favorites items (icon + title, no separators)
+- close and mute open on hover
+- active tab in the accent colour
 - centred address bar
 - Flexible Space works again (Customize Toolbar)
 - compact or normal density both line up (compact is closest to Safari)
+
+Old equal-width tabs: set `userChrome.safari.classic_tabs` to `true` in `about:config`.
 
 ## Files
 
