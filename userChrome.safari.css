@@ -1,0 +1,86 @@
+/* safari-cfg:begin - managed by apply.sh, edits inside this block are overwritten */
+
+/* Safari-like one-row toolbar for Lepton (Proton style) on macOS.
+   Sits on top of Lepton with its one-line tab bar (see user-overrides.js).
+   Measured on Firefox 160, macOS 27, compact density. */
+@media -moz-pref("userChrome.tabbar.one_liner") { @media -moz-pref("userChrome.tabbar.one_liner.combine_navbar") {
+
+  /* --- Window buttons at the far left -------------------------------------
+     Lepton's zero-distance transform anchors the position:fixed window
+     buttons to the tab strip instead of the window. */
+  #titlebar,
+  #toolbar-menubar,
+  #TabsToolbar {
+    transform: none !important;
+  }
+
+  /* --- One row, centred on the window buttons ------------------------------
+     The window buttons are 14px tall and start 15px below the top of the
+     window, so their centre line is at 22px. A 44px row puts the toolbar
+     buttons, the address bar and the tabs on that same line.
+     Firefox makes the tab strip (tab height + 2 x tab margin) tall, while
+     Lepton sizes the toolbar from the tab height alone, which leaves the two
+     halves of the row at different heights. All three are set here.
+     (--tab-margin-block is the current Firefox name, --tab-block-margin the
+     older one Lepton still uses.) */
+  :root:root:root {
+    --safari-row: 44px;
+    --tab-min-height: 28px !important;   /* tab pill, same height as the address bar */
+    --tab-margin-block: calc((var(--safari-row) - var(--tab-min-height)) / 2) !important;
+    --tab-block-margin: var(--tab-margin-block) !important;
+    --uc-tabbar-height: var(--safari-row) !important;
+  }
+  #TabsToolbar {
+    min-height: var(--safari-row) !important;
+    max-height: var(--safari-row) !important;
+  }
+  #TabsToolbar,
+  #TabsToolbar-customization-target,
+  #nav-bar,
+  #nav-bar-customization-target {
+    align-items: center !important;
+  }
+  .titlebar-buttonbox-container > .titlebar-buttonbox {
+    margin-block: calc(var(--safari-row) / 2 - 7px) !important;  /* = 15px */
+  }
+
+  /* --- Space after the window buttons ---------------------------------------
+     The green button ends 72px from the window edge, and the first toolbar
+     icon sits (4px + button padding) inside the toolbar. Reserving this much
+     makes the gap before the first icon equal to the gap between icons
+     (17px in compact density). Full screen has no window buttons, so Lepton's
+     own value applies there. */
+  :root:not([sizemode="fullscreen"]) #nav-bar {
+    border-inline-start-width: calc(69px + var(--toolbarbutton-padding-outer, 2px) + var(--toolbarbutton-padding-inner, 6px)) !important;
+  }
+
+  /* --- Small tabs ----------------------------------------------------------- */
+  #tabbrowser-tabs {
+    --tab-max-width: 170px !important;
+  }
+
+  /* --- Active tab in the macOS accent colour --------------------------------- */
+  #TabsToolbar#TabsToolbar #tabbrowser-tabs .tabbrowser-tab:is([selected], [visuallyselected], [multiselected]) > .tab-stack > .tab-background {
+    background: color-mix(in srgb, AccentColor 30%, transparent) !important;
+    outline: 1px solid color-mix(in srgb, AccentColor 80%, transparent) !important;
+    outline-offset: -1px !important;
+    box-shadow: none !important;
+  }
+
+  /* --- Tabs only appear when there is more than one --------------------------
+     With a single tab (and no pinned tabs or tab groups) the tab is hidden,
+     the toolbar takes the full width and the address bar is centred. The
+     new-tab and list-all-tabs buttons stay at the right edge. */
+  :root:has(#tabbrowser-arrowscrollbox > .tabbrowser-tab:only-of-type):not(:has(#tabbrowser-tabs :is(tab-group, .tabbrowser-tab[pinned]))) {
+    --uc-navbar-width: calc(100vw - 100px) !important;
+
+    #tabbrowser-arrowscrollbox > .tabbrowser-tab {
+      visibility: collapse !important;
+    }
+    #urlbar-container {
+      max-width: 46vw !important;
+      margin-inline: auto !important;
+    }
+  }
+}}
+/* safari-cfg:end */
