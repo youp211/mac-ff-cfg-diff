@@ -19,7 +19,9 @@ Restart Firefox.
 - window buttons, toolbar buttons, address bar, tabs all on one line
 - tab strip hidden with a single tab
 - small tabs, active tab in the accent colour
-- compact density, centred address bar
+- centred address bar
+- Flexible Space works again (Customize Toolbar)
+- compact or normal density both line up (compact is closest to Safari)
 
 ## Files
 

@@ -116,7 +116,9 @@ awk '/safari-cfg:begin|safari-fix:/{skip=1} !skip{print} /safari-cfg:end/{skip=0
 
 # --- prefs -------------------------------------------------------------------------
 # user.js = any other prefs you already had + Lepton's defaults + this repo's overrides.
-pref_names "$WORK/lepton/user.js" "$WORK/user-overrides.js" | sort -u > "$WORK/names"
+# (browser.uidensity was pinned by an earlier version of this repo. It is dropped here so
+# the density chosen in Customize Toolbar sticks.)
+{ pref_names "$WORK/lepton/user.js" "$WORK/user-overrides.js"; echo "browser.uidensity"; } | sort -u > "$WORK/names"
 {
   if [ -f "$UJ" ]; then
     awk 'NR==FNR{s[$0]=1;next} /^[[:space:]]*user_pref\("/{split($0,q,"\""); if(!(q[2] in s)) print}' "$WORK/names" "$UJ" > "$WORK/carried"

@@ -2,7 +2,7 @@
 
 /* Safari-like one-row toolbar for Lepton (Proton style) on macOS.
    Sits on top of Lepton with its one-line tab bar (see user-overrides.js).
-   Measured on Firefox 160, macOS 27, compact density. */
+   Measured on Firefox 160, macOS 27, in compact and normal density. */
 @media -moz-pref("userChrome.tabbar.one_liner") { @media -moz-pref("userChrome.tabbar.one_liner.combine_navbar") {
 
   /* --- Window buttons at the far left -------------------------------------
@@ -25,7 +25,7 @@
      older one Lepton still uses.) */
   :root:root:root {
     --safari-row: 44px;
-    --tab-min-height: 28px !important;   /* tab pill, same height as the address bar */
+    --tab-min-height: var(--urlbar-height, 28px) !important;   /* tab pill = address bar height */
     --tab-margin-block: calc((var(--safari-row) - var(--tab-min-height)) / 2) !important;
     --tab-block-margin: var(--tab-margin-block) !important;
     --uc-tabbar-height: var(--safari-row) !important;
@@ -45,13 +45,29 @@
   }
 
   /* --- Space after the window buttons ---------------------------------------
-     The green button ends 72px from the window edge, and the first toolbar
-     icon sits (4px + button padding) inside the toolbar. Reserving this much
-     makes the gap before the first icon equal to the gap between icons
-     (17px in compact density). Full screen has no window buttons, so Lepton's
-     own value applies there. */
+     The green button ends 72px from the window edge. Firefox gives the first
+     toolbar button extra start padding in some layouts and not in others, so
+     that padding is pinned to the normal value, and enough space is reserved
+     that the gap before the first icon equals the gap between icons (17px in
+     compact density). Full screen has no window buttons, so Lepton's own
+     value applies there. */
+  #nav-bar-customization-target > :is(toolbarbutton, toolbaritem):first-child {
+    padding-inline-start: var(--toolbarbutton-padding-outer, 2px) !important;
+  }
   :root:not([sizemode="fullscreen"]) #nav-bar {
-    border-inline-start-width: calc(69px + var(--toolbarbutton-padding-outer, 2px) + var(--toolbarbutton-padding-inner, 6px)) !important;
+    border-inline-start-width: calc(73px + var(--toolbarbutton-padding-outer, 2px) + var(--toolbarbutton-padding-inner, 6px)) !important;
+  }
+
+  /* --- Flexible Space works ---------------------------------------------------
+     Lepton hides Firefox's Flexible Space items in one-row mode, in the
+     toolbars and in the Customize panel. Show them again, sized as Firefox
+     does: they grow to about 100px where there is room and collapse when the
+     row is tight. In the tab strip they show whenever the tabs do. */
+  :root toolbarspring.chromeclass-toolbar-additional:not(#vertical-spacer) {
+    display: flex !important;
+  }
+  #TabsToolbar#TabsToolbar toolbarspring.chromeclass-toolbar-additional {
+    display: var(--safari-tabstrip-spring, flex) !important;
   }
 
   /* --- Small tabs ----------------------------------------------------------- */
@@ -73,6 +89,7 @@
      new-tab and list-all-tabs buttons stay at the right edge. */
   :root:has(#tabbrowser-arrowscrollbox > .tabbrowser-tab:only-of-type):not(:has(#tabbrowser-tabs :is(tab-group, .tabbrowser-tab[pinned]))) {
     --uc-navbar-width: calc(100vw - 100px) !important;
+    --safari-tabstrip-spring: none;
 
     #tabbrowser-arrowscrollbox > .tabbrowser-tab {
       visibility: collapse !important;
