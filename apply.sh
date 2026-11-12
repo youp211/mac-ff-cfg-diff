@@ -15,6 +15,15 @@ LEPTON_REPO="https://github.com/black7375/Firefox-UI-Fix"
 LEPTON_REF="${LEPTON_REF:-cd75a42f9f067aea588014d24609d2712f0790cf}"
 
 die() { echo "error: $*" >&2; exit 1; }
+usage() {
+  cat <<'USAGE'
+Safari-like Firefox on macOS = Lepton (Proton style) + the small diff in this repo.
+
+  apply.sh                      install into the default Firefox profile
+  apply.sh --check              report the current state, change nothing
+  apply.sh --profile <dir>      use a specific profile folder
+USAGE
+}
 
 CHECK=0
 PROFILE=""
@@ -22,7 +31,7 @@ while [ $# -gt 0 ]; do
   case "$1" in
     --check) CHECK=1 ;;
     --profile) [ $# -ge 2 ] || die "--profile needs a folder"; PROFILE="$2"; shift ;;
-    -h|--help) sed -n '2,9p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
+    -h|--help) usage; exit 0 ;;
     *) die "unknown option: $1 (try --help)" ;;
   esac
   shift
